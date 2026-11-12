@@ -1,42 +1,13 @@
 //----- GENERAR CONCEPTOS DESDE EL RECEPTOR --------------------------------------------------
 
+let totalConceptos = 0;
+
+let Conceptos = '';
+
 document.getElementById('generar').addEventListener('click', function() {
     generarConceptos();
 });
 
-let totalConceptos = 0;
-
-let calcularImporte = function(x){
-    let cantidad = parseFloat(document.getElementById('cantidad' + x).value) || 0;
-    let valorUnitario = parseFloat(document.getElementById('valorunitario' + x).value) || 0;
-    
-    document.getElementById('importe' + x).value = (cantidad * valorUnitario).toFixed(2);
-    
-    calcularRestantes();
-}
-
-let calcularRestantes = function(){
-    let importes = document.getElementsByName('importe');
-    let j = 0;
-    let subtotal = 0;
-    
-    while(j < importes.length){
-        subtotal += parseFloat(importes[j].value) || 0;
-        j++;
-    }
-
-    document.getElementById('subTotal').innerHTML = subtotal.toFixed(2);
-
-    let iva = subtotal * 0.16;
-
-    document.getElementById('iva').innerHTML = iva.toFixed(2);
-
-    let total = subtotal + iva;
-
-    document.getElementById('total').innerHTML = total.toFixed(2);
-}
-
-let Conceptos = '';
 
 let generarConceptos = function() {
     Conceptos = document.getElementById('conceptos').innerHTML;
@@ -66,19 +37,6 @@ document.getElementById('agregar').addEventListener('click', function() {
     totalConceptos++;
 });
 
-function eliminar(i) {
-    let fila = document.getElementById('Concepto' + i);
-    if(fila) {
-        let imp = document.getElementById('importe' + i);
-        if(imp) {
-            imp.value = "0.00";
-        }
-        fila.remove();
-        Conceptos = document.getElementById('conceptos').innerHTML;
-        calcularRestantes();
-    }       
-}
-
 function estructurarConcepto(num){
     return `
     <label class="borrar" onclick="eliminar(${num})" style="cursor: pointer;"> 
@@ -93,4 +51,47 @@ function estructurarConcepto(num){
     
     <label>Importe <input type="text" name="importe" id="importe${num}" value="0.00" placeholder="Importe" readonly> </label>
     `;
+}
+
+function eliminar(i) {
+    let fila = document.getElementById('Concepto' + i);
+    if(fila) {
+        let imp = document.getElementById('importe' + i);
+        if(imp) {
+            imp.value = "0.00";
+        }
+        fila.remove();
+        Conceptos = document.getElementById('conceptos').innerHTML;
+        calcularRestantes();
+    }       
+}
+
+let calcularImporte = function(x){
+    let cantidad = parseFloat(document.getElementById('cantidad' + x).value) || 0;
+    let valorUnitario = parseFloat(document.getElementById('valorunitario' + x).value) || 0;
+    
+    document.getElementById('importe' + x).value = (cantidad * valorUnitario).toFixed(2);
+    
+    calcularRestantes();
+}
+
+let calcularRestantes = function(){
+    let importes = document.getElementsByName('importe');
+    let j = 0;
+    let subtotal = 0;
+    
+    while(j < importes.length){
+        subtotal += parseFloat(importes[j].value) || 0;
+        j++;
+    }
+
+    document.getElementById('subTotal').innerHTML = subtotal.toFixed(2);
+
+    let iva = subtotal * 0.16;
+
+    document.getElementById('iva').innerHTML = iva.toFixed(2);
+
+    let total = subtotal + iva;
+
+    document.getElementById('total').innerHTML = total.toFixed(2);
 }
